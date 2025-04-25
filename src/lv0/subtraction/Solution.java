@@ -1,4 +1,4 @@
-package lv0.Subtraction;
+package lv0.subtraction;
 
 /*
 두 수의 차 구하기

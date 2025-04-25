@@ -1,4 +1,4 @@
-package lv0.Subtraction;
+package lv0.subtraction;
 
 public class App{
     public static void main(String[] args){
