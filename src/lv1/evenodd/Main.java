@@ -1,4 +1,4 @@
-package lv0.evenodd;
+package lv1.evenodd;
 
 public class Main {
     public static void main(String[] args){
