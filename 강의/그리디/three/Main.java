@@ -19,7 +19,7 @@ public class Main {
         int i = 0;
         while(true){
             int horor = numArray[i];
-            if(horor < n - i){
+            if(horor <= n - i){
                 result++;
                 i += horor;
             } else {
