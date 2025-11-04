@@ -21,8 +21,6 @@ public class Maze {
             }
         }
 
-        int result = 0;
-
         q.offer(new int[]{startX, startY});
         dist[startX][startY] = 1;
 
