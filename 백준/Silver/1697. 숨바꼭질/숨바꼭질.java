@@ -7,7 +7,6 @@ public class Main {
     private static int N;
 
     private static int bfs(int start){
-        int minCount = 1;
         boolean[] visited = new boolean[100001];
         int[] time = new int[100001];
         Queue<Integer> q = new LinkedList<>();
