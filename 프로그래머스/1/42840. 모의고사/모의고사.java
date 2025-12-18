@@ -1,35 +1,24 @@
-import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.stream.*;
+import java.util.*;
 
 class Solution {
     public int[] solution(int[] answers) {
-        int[] answer1 = {1, 2, 3, 4, 5};
-        int[] answer2 = {2, 1, 2, 3, 2, 4, 2, 5};
-        int[] answer3 = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
-        int[] count = new int[3];
+        String[] choices = {"12345","21232425", "3311224455"};
+        int maxGrade = 0;
+        ArrayList<Integer> list = new ArrayList<>();
         
-        for(int i = 0; i < answers.length; i++){
-            if(answers[i] == answer1[i % answer1.length]) count[0]++;
-            if(answers[i] == answer2[i % answer2.length]) count[1]++;
-            if(answers[i] == answer3[i % answer3.length]) count[2]++;
+        for(int i = 0; i < 3; i++){
+            int grade = 0;
+            for(int j = 0; j < answers.length; j++){
+                int choice = choices[i].charAt(j % choices[i].length()) - '0';
+                if(choice == answers[j]) grade++;
+            }
+            if(grade > maxGrade) {
+                maxGrade = grade;
+                list = new ArrayList<>();
+                list.add(i + 1);
+            } else if(grade == maxGrade) list.add(i + 1);
         }
         
-        int maxNum = count[0];
-        List<Integer> maxCount = new ArrayList<>();
-        maxCount.add(1);
-        for(int i = 1; i < 3; i++){
-            if(count[i] > maxNum) {
-                maxCount.clear();
-                maxNum = count[i];
-                maxCount.add(i + 1);
-            }
-            else if(count[i] == maxNum) {
-                maxCount.add(i + 1);
-            }
-        }
-        
-        return maxCount.stream().mapToInt(i -> i).toArray();
+        return list.stream().mapToInt(Integer::intValue).toArray();
     }
 }
