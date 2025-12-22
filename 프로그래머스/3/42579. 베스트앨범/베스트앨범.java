@@ -7,18 +7,7 @@ class Solution {
         List<Integer> answer = new ArrayList<>();
         
         for(int i = 0; i < genres.length; i++){
-            // total.compute(genres[i], (key, value) -> value == null ? plays[i] : value + plays[i]);
             total.put(genres[i], total.getOrDefault(genres[i], 0) + plays[i]);
-            // genreListMap.compute(genres[i], (key, value) -> {
-            //     if (value == null) {
-            //         List<Integer> list = new ArrayList<>();
-            //         list.add(i);
-            //         return list;
-            //     } else {
-            //         value.add(i);
-            //         return value;
-            //     }
-            // });
             genreListMap.computeIfAbsent(genres[i], k -> new ArrayList<>()).add(i);
         }
 
