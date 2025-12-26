@@ -20,10 +20,7 @@ class Solution {
         for(int i = 0; i < count; i++){
             char c = word.charAt(i);
             int x = map.get(c);
-            if(x == 0) answer++;
-            else{
-                answer += x * nums[i] + 1;
-            }
+            answer += x * nums[i] + 1;
         }
         
         return answer;
