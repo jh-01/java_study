@@ -1,34 +1,35 @@
 class Solution {
     public int solution(String name) {
+        int answer = 0;
+        int index = 0;
         int n = name.length();
-        int answer = n - 1;
-        int minAlphCount = 0;
         
+        // 알파벳 계산
         for(int i = 0; i < n; i++){
-            char c = name.charAt(i);
-            if(c == 'A') continue;
-            minAlphCount += getMinAlphCount(c);
+            if(name.charAt(i) == 'A') continue;
+            answer += getMinAlphabetCount(name.charAt(i));
         }
         
-        for(int i = 0; i < n; i++){
-            int nextInt = i + 1;
-            while(nextInt < n && name.charAt(nextInt) == 'A'){
-                nextInt++;
+        // 커서 이동 계산
+        int move = n - 1;
+        for(int i = 0; i < n - 1; i++){
+            int j = i + 1;
+            
+            // 연속된 A 구간 찾기
+            while (j < n && name.charAt(j) == 'A') {
+                j++;
             }
-            
-            int leftMove = i * 2 + n - nextInt;
-            answer = answer > leftMove ? leftMove : answer;
-            
-            int rightMove = (n - nextInt) * 2 + i;
-            answer = answer > rightMove ? rightMove : answer;
-
+            move = Math.min(move, i * 2 + (n - j));
+            move = Math.min(move, (n - j) * 2 + i);
         }
-        return answer + minAlphCount;
+        
+        return answer += move;
     }
     
-    private int getMinAlphCount(char c){
-        int prevCount = c - 'A';
-        int nextCount = 'Z' - c + 1;
-        return prevCount >= nextCount? nextCount : prevCount;
+    private int getMinAlphabetCount(char c){
+        return Math.min(
+            c - 'A',
+            'Z' - c + 1
+        );
     }
 }
