@@ -5,9 +5,9 @@ class Solution {
         ArrayList<Integer> result = new ArrayList<>();
         
         int cnt = 1;
-        int temp = (int)Math.ceil((100.0 - progresses[0]) / speeds[0]);
+        int temp = (100 - progresses[0] + speeds[0] - 1) / speeds[0];
         for(int i = 1; i < progresses.length; i++){
-            int next = (int)Math.ceil((100.0 - progresses[i]) / speeds[i]);
+            int next = (100 - progresses[i] + speeds[i] - 1) / speeds[i];
             if (next <= temp) {
                 cnt++;
             } else {
