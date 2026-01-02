@@ -1,47 +1,46 @@
-import java.util.Arrays;
+import java.util.*;
 
 class Solution {
+    private int[] parent;
     
-    static int[] head = new int[101];
+    private int find(int x){
+        if(parent[x] != x) {
+            parent[x] = find(parent[x]);
+        }
+        return parent[x];
+    }
+    
+    private boolean union(int x, int y){
+        x = find(x);
+        y = find(y);
+        
+        if(x == y) return false; // 이미 연결됨
+        parent[y] = x;
+        return true;
+    }
     
     public int solution(int n, int[][] costs) {
         int answer = 0;
-        int count = 0;
         
-        // HEAD 배열 초기화
+        // cost 기준으로 정렬
+        Arrays.sort(costs, (a, b) -> a[2] - b[2]);
+        
+        // 리스트에 값 넣기
+        parent = new int[n];
         for(int i = 0; i < n; i++){
-            head[i] = i;
+            parent[i] = i;
         }
         
-         // 마지막 숫자 기준으로 오름차순 정렬
-        Arrays.sort(costs, (a, b) -> Integer.compare(a[2], b[2]));
-
-        int i = 0;
-        while(count < n - 1 && i < costs.length){
-            int a = costs[i][0];
-            int b = costs[i][1];
+        for(int i = 0; i < costs.length; i++){
+            int x = costs[i][0];
+            int y = costs[i][1];
+            int cost = costs[i][2];
             
-            if(find(a) != find(b)){
-                union(a, b);
-                answer += costs[i][2];
-                count++;
+            // 연결됐는지 확인
+            if(union(x, y)){
+                answer += cost;
             }
-            i++;
         }
         return answer;
-    }
-    
-    private int find(int x){
-        if(head[x] == x) return x;
-        return head[x] = find(head[x]);
-    }
-    
-    private void union(int a, int b){
-        int aHead = find(a);
-        int bHead = find(b);
-        
-        if(aHead != bHead) {
-            head[bHead] = aHead;
-        }
     }
 }
