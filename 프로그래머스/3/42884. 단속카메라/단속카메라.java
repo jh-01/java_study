@@ -1,24 +1,19 @@
-import java.util.Arrays;
+import java.util.*;
 
 class Solution {
     public int solution(int[][] routes) {
-        int answer = 0;
+        int N = routes.length;
         
-        // routes 배열 끝지점을 기준으로 정렬
-        Arrays.sort(routes, (a, b) -> Integer.compare(a[1], b[1]));
+        Arrays.sort(routes, (a,b) -> a[1] - b[1]);
         
-        int i = 1;
-        int prev = routes[0][1];
-        answer++;
-        
-        while(i < routes.length){
-            int tempStart = routes[i][0];
-            int tempEnd = routes[i][1];
-            if(prev < tempStart) {
+        int answer = 1;
+        int x = routes[0][1];
+        for(int i = 1; i < N; i++){
+            int y = routes[i][0];
+            if(y > x){ // 카메라에 안걸림
+                x = routes[i][1];
                 answer++;
-                prev = tempEnd;
             }
-            i++;
         }
         
         return answer;
