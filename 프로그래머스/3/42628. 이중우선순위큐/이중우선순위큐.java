@@ -3,37 +3,32 @@ import java.util.*;
 class Solution {
     public int[] solution(String[] operations) {
         int[] answer = new int[2];
-        int maxN = 0;
-        int minN = 123456789;
-        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
-        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
+        int n = operations.length;
+        TreeMap<Integer, Integer> tree = new TreeMap<>();
         
-        for(int i = 0; i < operations.length; i++){
-            String s = operations[i];
-            String[] operation = s.split(" ");
+        for(int i = 0; i < n; i++){
+            String[] oper = operations[i].split(" ");
+            int x = Integer.parseInt(oper[1]);
             
-            if(operation[0].equals("I")) {
-                maxHeap.offer(Integer.parseInt(operation[1]));
-                minHeap.offer(Integer.parseInt(operation[1]));
-            }
-            else if(operation[0].equals("D")){
-                if (minHeap.isEmpty()) continue;
-                
-                if (operation[1].equals("1")) {          // 최대값 삭제
-                    int max = maxHeap.poll();
-                    minHeap.remove(max);
-                } else {                // 최소값 삭제
-                    int min = minHeap.poll();
-                    maxHeap.remove(min);
+            if(oper[0].equals("I")){
+                tree.put(x, tree.getOrDefault(x, 0) + 1);
+            } else if(oper[0].equals("D")){
+                if (tree.isEmpty()) continue;
+                if(x == 1){
+                    int max = tree.lastKey();
+                    if(tree.put(max, tree.get(max) - 1) == 1) tree.remove(max);
+                } else {
+                    int min = tree.firstKey();
+                    if(tree.put(min, tree.get(min) - 1) == 1) tree.remove(min);
                 }
             }
         }
         
-        if (!minHeap.isEmpty()) {
-            answer[0] = maxHeap.peek(); // 최대값
-            answer[1] = minHeap.peek(); // 최소값
+        if (!tree.isEmpty()) {
+            answer[0] = tree.lastKey();
+            answer[1] = tree.firstKey();
         }
-
+        
         return answer;
     }
 }
