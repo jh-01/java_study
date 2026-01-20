@@ -3,6 +3,7 @@ class Solution {
         long timeCur = 0;
         long timePrev = 0;
         long totalTime = 0;
+        
         for(int i = 0; i < diffs.length; i++){
             timeCur = times[i];
             
@@ -10,8 +11,7 @@ class Solution {
                 totalTime += timeCur;
             } else {
                 long retry = diffs[i] - level;
-                long prevTime = (i == 0) ? 0 : times[i - 1];
-                totalTime += (prevTime + timeCur) * retry + timeCur;
+                totalTime += (times[i - 1] + timeCur) * retry + timeCur;
             }
             
             // 이전 퍼즐의 소요 시간 구하기
@@ -19,6 +19,7 @@ class Solution {
         }
         return totalTime;
     }
+    
     public int solution(int[] diffs, int[] times, long limit) {
         int answer = Integer.MAX_VALUE;
         
