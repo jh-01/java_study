@@ -2,59 +2,43 @@ import java.util.*;
 
 class Solution {
     public int solution(int[][] points, int[][] routes) {
-        int N = points.length; // 포인트 수
-        int X = routes.length; // 로봇 수
+        int X = routes.length;
         int answer = 0;
         
-        // 시간, (좌표, 해당 좌표 로봇 수)
-        Map<Integer, Map<String, Integer>> timeMap = new HashMap<>();
-
-        for(int i = 0; i < X; i++){ // i는 로봇 인덱스
+        Map<Integer, Map<String, Integer>> maps = new HashMap<>();
+        
+        for(int i = 0; i < X; i++){ // i는 로봇
             int time = 0;
-            // 시작 좌표
-            int x = points[routes[i][0] - 1][0];
-            int y = points[routes[i][0] - 1][1];
+            int r = points[routes[i][0] - 1][0];
+            int c = points[routes[i][0] - 1][1];
             
-            // time = 0 기록
-            timeMap.putIfAbsent(0, new HashMap<>());
-            Map<String, Integer> map0 = timeMap.get(0);
-            String key0 = x + "," + y;
+            String key = r + "," + c;
+            maps.putIfAbsent(time, new HashMap<>());
+            Map<String, Integer> map = maps.get(time);
             
-            int cnt0 = map0.getOrDefault(key0, 0) + 1;
-            map0.put(key0, cnt0);
-            if (cnt0 == 2) answer++;
+            int count = map.getOrDefault(key, 0) + 1;
+            map.put(key, count);
+            maps.put(time, map);
+            if(count == 2) answer++;
             
-            // 도착 좌표
-            int endR = points[routes[i][1] - 1][0];
-            int endC = points[routes[i][1] - 1][1];
-            
-            // routes의 각 구간 처리
-            for (int r = 0; r < routes[i].length - 1; r++) {
-
-                int endX = points[routes[i][r + 1] - 1][0];
-                int endY = points[routes[i][r + 1] - 1][1];
-
-                // 현재 → 다음 포인트까지 이동
-                while (x != endX || y != endY) {
-
-                    if (x != endX) {
-                        x += Integer.compare(endX, x);
-                    } else {
-                        y += Integer.compare(endY, y);
-                    }
-
+            for(int dir = 0; dir < routes[i].length - 1; dir++){
+                int endR = points[routes[i][dir + 1] - 1][0];
+                int endC = points[routes[i][dir + 1] - 1][1];
+               
+                while(r != endR || c != endC){
+                    if(r != endR) r += Integer.compare(endR, r);
+                    else if(c != endC) c += Integer.compare(endC, c);
                     time++;
-
-                    timeMap.putIfAbsent(time, new HashMap<>());
-                    Map<String, Integer> map = timeMap.get(time);
-
-                    String key = x + "," + y;
-                    int cnt = map.getOrDefault(key, 0) + 1;
-                    map.put(key, cnt);
-
-                    if (cnt == 2) answer++;
+                    
+                    key = r + "," + c;
+                    Map<String, Integer> newMap = maps.getOrDefault(time, new HashMap<>());
+                    count = newMap.getOrDefault(key, 0) + 1;
+                    newMap.put(key, count);
+                    maps.put(time, newMap);
+                    if(count == 2) answer++;
                 }
             }
+            
         }
         
         return answer;
