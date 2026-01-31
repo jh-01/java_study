@@ -1,0 +1,46 @@
+import java.io.*;
+import java.util.*;
+
+class Main {
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        // 첫 번째 줄에서 N을 바로 읽어야 합니다.
+        String line = br.readLine();
+        if (line == null) return;
+        int N = Integer.parseInt(line.trim());
+
+        // A와 B 배열 읽기
+        int[] A = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        int[] B = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+
+        long K = Integer.parseInt(br.readLine().trim());
+
+        // 뒤 자리부터 처리
+        for (int i = 0; i < K; i++) {
+            B[N - 1]++; // 마지막 자리 증가
+            
+            // 뒤에서부터 올림 처리
+            for (int j = N - 1; j >= 0; j--) {
+                if (B[j] > A[j]) {
+                    B[j] = 0; // 현재 자리는 0이 됨
+                    if (j > 0) {
+                        B[j - 1]++; // 앞자리에 올림 전달
+                    }
+                    // j가 0인 경우(맨 앞자리)는 여기서 0이 되고 끝납니다.
+                } else {
+                    break; // 올림이 없으면 중단
+                }
+            }
+        }
+			
+
+
+        // 6. 출력
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < N; i++) {
+            sb.append(B[i]);
+        }
+        System.out.println(sb.toString());
+    }
+}
