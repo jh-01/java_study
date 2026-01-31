@@ -1,0 +1,55 @@
+import java.io.*;
+import java.util.*;
+
+class Main {
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+
+        int[][] map = new int[N][N];
+
+        for (int i = 0; i < N; i++) {
+            map[i] = Arrays.stream(br.readLine().split(" "))
+                           .mapToInt(Integer::parseInt)
+                           .toArray();
+        }
+
+        int[] dx = {1, -1, 0, 0};
+        int[] dy = {0, 0, 1, -1};
+        int day = 0;
+
+        while (true) {
+            int[][] dec = new int[N][N];
+            boolean hasTree = false;
+
+            // 1️⃣ 감소량 계산
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    if (map[i][j] > 0) {
+                        hasTree = true;
+                        for (int d = 0; d < 4; d++) {
+                            int ni = i + dx[d];
+                            int nj = j + dy[d];
+                            if (ni < 0 || ni >= N || nj < 0 || nj >= N) continue;
+                            if (map[ni][nj] == 0) dec[i][j]++;
+                        }
+                    }
+                }
+            }
+
+            // 🌟 종료 조건: 더 이상 나무 없음
+            if (!hasTree) break;
+
+            // 2️⃣ 감소 적용
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    map[i][j] = Math.max(0, map[i][j] - dec[i][j]);
+                }
+            }
+
+            day++;
+        }
+
+        System.out.println(day);
+    }
+}
