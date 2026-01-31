@@ -1,0 +1,43 @@
+import java.io.*;
+import java.util.*;
+
+class Main {
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());
+		String[] results = new String[N];
+		
+		for(int i = 0; i < N; i++){
+			int[] a = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+			int[] b = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+
+			for(int j = 4; j >= 1; j--){
+				String result  = calculateResult(a, b, j);
+				if(!result.equals("D")){
+					results[i] = result;
+					break;
+				} else results[i] = result;
+			}
+		}
+
+		for(String s : results){
+			System.out.println(s);
+		}
+	}
+
+	private static String calculateResult(int[] a, int[] b, int x){
+		int aCnt = 0;
+		int bCnt = 0;
+		
+		for(int i = 1; i < a.length; i++){
+			if(a[i] == x) aCnt++;
+		}
+		
+		for(int i = 1; i < b.length; i++){
+			if(b[i] == x) bCnt++;
+		}
+
+		if(aCnt == bCnt) return "D";
+		return aCnt > bCnt ? "A" : "B";
+	}
+}
