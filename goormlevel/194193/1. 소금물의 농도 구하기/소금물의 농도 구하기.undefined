@@ -1,0 +1,16 @@
+import java.io.*;
+import java.util.*;
+
+class Main {
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int[] input = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+		int N = input[0];
+		int M = input[1];
+
+		double prevSalt = N * 0.07;
+		double concentration = prevSalt / (N + M) * 100;
+		double result = Math.floor(concentration * 100) / 100;
+		System.out.printf("%.2f%n", result);
+	}
+}
