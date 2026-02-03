@@ -1,0 +1,43 @@
+import java.io.*;
+import java.util.*;
+
+class Main {
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		int N = Integer.parseInt(br.readLine());
+		String[] S = br.readLine().split("");
+		String[] T = br.readLine().split("");
+
+		int[][] edge = new int[4][4];
+		
+		for(int i = 0; i < N; i++){
+			int from = S[i].charAt(0) - 'A';
+			int to   = T[i].charAt(0) - 'A';
+			
+			if (from != to) {
+			    edge[from][to]++;
+			}
+		}
+
+		int answer = 0;
+		for(int i = 0; i < 4; i++){
+			for(int j = 0; j < 4; j++){
+				int x = Math.min(edge[i][j], edge[j][i]);
+				answer += x;
+				edge[i][j]-=x;
+				edge[j][i]-=x;
+			}
+		}
+
+		for (int i = 0; i < 4; i++) {
+	    for (int j = 0; j < 4; j++) {
+	        for (int k = 0; k < 4; k++) {
+	            if (i == j || j == k || i == k) continue;
+	            int x = Math.min(edge[i][j],
+	                    Math.min(edge[j][k], edge[k][i]));
+	            if (x > 0) {
+	                answer += 2 * x;
+	                edge[i][j] -= x;
+	                edge[j][k] -= x;
+	                edge[k][i] -= x;
