@@ -1,0 +1,50 @@
+import java.io.*;
+import java.util.*;
+
+class Main {
+
+	private static boolean[] visited;
+	private static List<Integer>[] graph;
+
+	private static void solve(int cur, int[] result){
+		visited[cur] = true;
+		result[0]++;        // 방문 수 증가
+    result[1] = cur; 
+		
+		for(int next : graph[cur]){
+			if(!visited[next]){
+				solve(next, result);
+				break;
+			}
+		}
+	}
+	
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int[] input = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+		int N = input[0];
+		int M = input[1];
+		int K = input[2];
+		int[] answer = new int[2];
+
+		graph = new ArrayList[N + 1];
+		visited = new boolean[N + 1];
+
+		for (int i = 1; i <= N; i++) {
+        graph[i] = new ArrayList<>();
+    }
+		
+		for(int i = 0; i < M; i++){
+			input = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+			int s = input[0];
+			int e = input[1];
+
+			graph[s].add(e);
+			graph[e].add(s);
+		}
+
+		for (int i = 1; i <= N; i++) {
+		    Collections.sort(graph[i]);
+		}
+
+		solve(K, answer);
