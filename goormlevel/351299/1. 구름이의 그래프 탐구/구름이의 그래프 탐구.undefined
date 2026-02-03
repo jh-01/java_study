@@ -1,0 +1,49 @@
+import java.io.*;
+import java.util.*;
+
+class Main {
+
+	private static List<Integer>[] graph;
+	private static boolean[] visited;
+	
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int M = Integer.parseInt(br.readLine());
+		int[][] edges = new int[M][2];
+		int[] answer = new int[2];
+		int N = 0;
+
+		// 입력 먼저 받으면서 N 계산
+    for (int i = 0; i < M; i++) {
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int u = Integer.parseInt(st.nextToken());
+        int v = Integer.parseInt(st.nextToken());
+
+        edges[i][0] = u;
+        edges[i][1] = v;
+
+        N = Math.max(N, Math.max(u, v));
+    }
+
+		 // 그래프 초기화
+    graph = new ArrayList[N + 1];
+    visited = new boolean[N + 1];
+
+    for (int i = 1; i <= N; i++) {
+        graph[i] = new ArrayList<>();
+    }
+
+		// 간선 연결
+    for (int i = 0; i < M; i++) {
+        int u = edges[i][0];
+        int v = edges[i][1];
+
+        graph[u].add(v);
+        graph[v].add(u);
+    }
+
+		answer[0] = Integer.MAX_VALUE;
+		answer[1] = Integer.MIN_VALUE;
+		for (int i = 1; i <= N; i++) {
+			if(!visited[i]){
+				int cnt = dfs(i);
