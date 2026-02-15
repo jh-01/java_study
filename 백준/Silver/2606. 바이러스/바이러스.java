@@ -1,50 +1,47 @@
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    private static int N;
-    private static int M;
-    private static boolean[] visited;
-    private static ArrayList<ArrayList<Integer>> graph;
 
-    private static int dfs(int start){
-        int result = 1;
+    private static boolean[] visited;
+    private static List<Integer>[] graph;
+
+    private static int dfs(int start, int depth){
+        int count = 1;
         visited[start] = true;
 
-        for(int i = 0; i < graph.get(start).size(); i++){
-            int temp = graph.get(start).get(i);
-
-            if(!visited[temp]){
-                visited[temp] = true;
-                result += dfs(temp);
+        for(int i = 0; i < graph[start].size(); i++){
+            int next = graph[start].get(i);
+            if(!visited[next]){
+                visited[next] = true;
+                count += dfs(next, depth + 1);
             }
         }
-        return result;
+
+        return count;
     }
-    
-    public static void main(String[] args){
-        Scanner sc = new Scanner(System.in);
-        N = sc.nextInt();
-        sc.nextLine();
-        M = sc.nextInt();
-        sc.nextLine();
+    public static void main(String[] args) throws NumberFormatException, IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        int M = Integer.parseInt(br.readLine());
 
         visited = new boolean[N + 1];
-        graph = new ArrayList<ArrayList<Integer>>();
+        graph = new ArrayList[N + 1];
 
-        for(int i = 0; i <= N; i++){
-            graph.add(new ArrayList<>());
+        for(int i = 1; i <= N; i++){
+            graph[i] = new ArrayList<>();
         }
 
         for(int i = 0; i < M; i++){
-            int x = sc.nextInt();
-            int y = sc.nextInt();
-            sc.nextLine();
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int u = Integer.parseInt(st.nextToken());
+            int v = Integer.parseInt(st.nextToken());
 
-            graph.get(x).add(y);
-            graph.get(y).add(x);
+            graph[u].add(v);
+            graph[v].add(u);
         }
 
-        System.out.println(dfs(1) - 1);
+        int result = dfs(1, 0);
+        System.out.println(result - 1);
     }
 }
