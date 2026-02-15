@@ -1,51 +1,56 @@
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    private static int N;
-    private static int M;
     private static boolean[] visited;
-    private static ArrayList<ArrayList<Integer>> graph;
+    private static int[][] graph;
 
-    private static void dfs(int start){
+    private static void bfs(int N, int start){
+        Queue<Integer> q = new LinkedList<>();
+
+        q.add(start);
         visited[start] = true;
 
-        for(int i = 0; i < graph.get(start).size(); i++){
-            int next = graph.get(start).get(i);
-            if(!visited[next]){
-                dfs(next);
+        while(!q.isEmpty()){
+            int temp = q.poll();
+
+            for(int i = 1; i <= N; i++){
+                if(graph[temp][i] == 1 && !visited[i]){
+                    q.add(i);
+                    visited[i] = true;
+                }
             }
             
         }
     }
 
-    public static void main(String[] args){
-        int count = 0;
-        Scanner sc = new Scanner(System.in);
+    public static void main(String[] args) throws IOException{
+        int result = 0;
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        N = sc.nextInt();
-        M = sc.nextInt();
-        sc.nextLine();
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
 
         visited = new boolean[N + 1];
-        graph = new ArrayList<>();
-        for(int i = 0; i <= N; i++){
-            graph.add(new ArrayList<>());
-        }
+        graph = new int[N + 1][N + 1];
+
         for(int i = 0; i < M; i++){
-            int x = sc.nextInt();
-            int y = sc.nextInt();
-            graph.get(x).add(y);
-            graph.get(y).add(x);
+            st = new StringTokenizer(br.readLine());
+            int u = Integer.parseInt(st.nextToken());
+            int v = Integer.parseInt(st.nextToken());
+
+            graph[u][v] = 1;
+            graph[v][u] = 1;
         }
 
         for(int i = 1; i <= N; i++){
             if(!visited[i]){
-                dfs(i);
-                count++;
+                bfs(N, i);
+                result++;
             }
         }
-        System.out.println(count);
+        
+        System.out.println(result);
     }
 }
-
