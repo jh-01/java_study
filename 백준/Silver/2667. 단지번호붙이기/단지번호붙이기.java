@@ -1,63 +1,66 @@
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Scanner;
+import java.util.*;
+import java.io.*;
 
-class Main {
+public class Main {
+
     private static int N;
     private static int[][] map;
     private static boolean[][] visited;
     private static int[] dx = {1, -1, 0, 0};
     private static int[] dy = {0, 0, 1, -1};
 
-    private static int dfs(int startX, int startY){
-        visited[startX][startY] = true;
-        int result = 1;
+    private static int dfs(int x, int y){
+        int count = 1;
+        visited[x][y] = true;
 
         for(int i = 0; i < 4; i++){
-            int vx = startX + dx[i];
-            int vy = startY + dy[i];
+            int nx = x + dx[i];
+            int ny = y + dy[i];
 
-            if(vx < 0 || vx >= N || vy < 0 || vy >= N){
-                continue;
-            }
-
-            if(!visited[vx][vy] && map[vx][vy] == 1){
-                visited[vx][vy] = true;
-                result += dfs(vx, vy);
-            }
-        }
-        return result;
-    }
-
-    public static void main(String[] args){
-        ArrayList<Integer> result = new ArrayList<>();
-        Scanner sc = new Scanner(System.in);
-
-        N = sc.nextInt();
-        sc.nextLine();
-
-        map = new int[N][N];
-        visited = new boolean[N][N];
-        for(int i = 0; i < N; i++){
-            String s = sc.nextLine();
-            for(int j = 0; j < N; j++){
-                map[i][j] = s.charAt(j) - '0';
-            }
-        }
-
-        for(int i = 0; i < N; i++){
-            for(int j = 0; j < N; j++){
-                if(map[i][j] == 1 && !visited[i][j]){
-                    result.add(dfs(i, j));
+            if(nx >= 0 && nx < N && ny >= 0 && ny < N){
+                if(!visited[nx][ny] && map[nx][ny] == 1){
+                    visited[nx][ny] = true;
+                    count += dfs(nx, ny);
                 }
             }
         }
 
-        System.out.println(result.size());
-        Collections.sort(result);
-        for(int size : result){
-            System.out.println(size);
+        return count;
+    }
+
+    public static void main(String[] args) throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        N = Integer.parseInt(st.nextToken());
+
+        map = new int[N][N];
+        visited = new boolean[N][N];
+        int result = 0;
+        int index = 0;
+        List<Integer> counts = new ArrayList<>();
+
+        for(int i = 0; i < N; i++){
+            String line = br.readLine();
+            for(int j = 0; j < N; j++){
+                map[i][j] = line.charAt(j) - '0';
+            }
+        }
+
+        for(int i = 0; i < N; i++){
+            for(int j = 0; j < N; j++){
+                if(!visited[i][j] && map[i][j] == 1){
+                    result++;
+                    counts.add(dfs(i, j));
+                }
+            }
+        }
+        Collections.sort(counts);
+
+        System.out.println(result);
+        for(int i = 0; i < result; i++){
+            System.out.println(counts.get(i));
         }
     }
+    
 }
