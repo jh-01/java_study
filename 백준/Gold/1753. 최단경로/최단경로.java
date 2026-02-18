@@ -1,75 +1,77 @@
-import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
-public class Main {
-    private static int[] dist;
-    private static ArrayList<ArrayList<int[]>> graph;
+class Node implements Comparable<Node>{
+    int vertex;
+    int weight;
 
-    private static void dijkstra(int start){
-        dist[start] = 0;
-
-        PriorityQueue<int[]> pq = new PriorityQueue<>(
-                (a, b) -> a[1] - b[1]
-        );
-
-        pq.add(new int[]{start, 0});
-
-        while(!pq.isEmpty()){
-            int[] now = pq.poll();
-            int current = now[0];
-            int currentDist = now[1];
-
-            if(dist[current] < currentDist) continue;
-
-            for(int[] next : graph.get(current)){
-                int nextNode = next[0];
-                int nextWeight = next[1];
-
-                if(dist[nextNode] > currentDist + nextWeight){
-                    dist[nextNode] = currentDist + nextWeight;
-                    pq.add(new int[]{nextNode, dist[nextNode]});
-                }
-            }
-        }
+    Node(int vertex, int weight){
+        this.vertex = vertex;
+        this.weight = weight;
     }
 
+    @Override
+    public int compareTo(Node o){
+        return this.weight - o.weight;
+    }
+}
 
-    public static void main(String[] args){
-        Scanner sc = new Scanner(System.in);
+public class Main {
+    private static List<Node>[] graph;
+    private static int[] dist;
 
-        int V = sc.nextInt();
-        int E = sc.nextInt();
-        sc.nextLine();
-        int K = sc.nextInt();
-        sc.nextLine();
+    public static void main(String[] args) throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
+        int V = Integer.parseInt(st.nextToken());
+        int E = Integer.parseInt(st.nextToken());
+
+        st = new StringTokenizer(br.readLine());
+        int K = Integer.parseInt(st.nextToken());
+
+        graph = new ArrayList[V + 1];
         dist = new int[V + 1];
-        graph = new ArrayList<>();
-        
-        for(int i = 0; i <= V; i++){
-            graph.add(new ArrayList<>());
-        }
-        
-        for(int i = 1; i < dist.length; i++){
+        for(int i = 1; i <= V; i++){
+            graph[i] = new ArrayList<>();
             dist[i] = Integer.MAX_VALUE;
         }
 
         for(int i = 0; i < E; i++){
-            int u = sc.nextInt();
-            int v = sc.nextInt();
-            int w = sc.nextInt();
-            sc.nextLine();
+            st = new StringTokenizer(br.readLine());
+            int u = Integer.parseInt(st.nextToken());
+            int v = Integer.parseInt(st.nextToken());
+            int w = Integer.parseInt(st.nextToken());
 
-            graph.get(u).add(new int[]{v, w});
+            graph[u].add(new Node(v, w));
         }
 
         dijkstra(K);
+
         for(int i = 1; i <= V; i++){
-            if (dist[i] == Integer.MAX_VALUE) {
-                System.out.println("INF");
-            }
+            if(dist[i] == Integer.MAX_VALUE) System.out.println("INF");
             else System.out.println(dist[i]);
+        }
+    }
+
+    private static void dijkstra(int start){
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        pq.offer(new Node(start, 0));
+        dist[start] = 0;
+
+        while(!pq.isEmpty()){
+            Node cur = pq.poll();
+
+            if(cur.weight > dist[cur.vertex]) continue;
+
+            for(Node next : graph[cur.vertex]){
+                int newWeight =  dist[cur.vertex] + next.weight;
+
+                if(newWeight < dist[next.vertex]){
+                    dist[next.vertex] = newWeight;
+                    pq.offer(new Node(next.vertex, newWeight));
+                }
+            }
         }
     }
 }
