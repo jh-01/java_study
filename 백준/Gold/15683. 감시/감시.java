@@ -6,6 +6,7 @@ public class Main {
     private static int[][] office;
     private static int[] dx = {1, 0, -1, 0};
     private static int[] dy = {0, 1, 0, -1};
+    private static List<int[]> cameraList;
     private static int[][][] dir = {
         {},
         {{0},{1},{2},{3}},                 // 1
@@ -23,25 +24,22 @@ public class Main {
         M = Integer.parseInt(st.nextToken());
 
         office = new int[N][M];
-        List<int[]> cameraList = new ArrayList<>();
-        int count = 0;
+        cameraList = new ArrayList<>();
         for(int i = 0; i < N; i++){
             st = new StringTokenizer(br.readLine());
             for(int j = 0; j < M; j++){
                 office[i][j] = Integer.parseInt(st.nextToken());
-                if(office[i][j] == 0){
-                    count++;
-                }else if(office[i][j] >= 1 && office[i][j]<= 5){
+                if(office[i][j] >= 1 && office[i][j]<= 5){
                     cameraList.add(new int[]{i, j, office[i][j]});
                 }
             }
         }
 
-        int result = dfs(cameraList, 0);
+        int result = dfs(0);
         System.out.println(result);
     }
 
-    private static int dfs(List<int[]> cameraList, int cameraIndex){
+    private static int dfs(int cameraIndex){
         int minNum = Integer.MAX_VALUE;
 
         if(cameraIndex >= cameraList.size()){
@@ -68,7 +66,7 @@ public class Main {
                 watch(camera[0], camera[1], dir[camera[2]][i][j]);
             }
 
-            minNum = Math.min(minNum, dfs(cameraList, cameraIndex + 1));
+            minNum = Math.min(minNum, dfs(cameraIndex + 1));
             
             for(int j=0; j < N; j++){
                 office[j] = copy[j].clone();
