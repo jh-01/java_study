@@ -1,35 +1,45 @@
 import java.util.*;
 
 class Solution {
-    private boolean[] isVisited;
-    
-    private void bfs(int start, int[][] computers) {
-        Queue<Integer> q = new LinkedList<>();
-        
-        q.offer(start);
-        while(!q.isEmpty()){
-            int x = q.poll();
-            isVisited[x] = true;
-            
-            for(int y = 0; y < computers.length; y++){
-                if(!isVisited[y] && computers[x][y] == 1){
-                    q.offer(y);
-                }
-            }
-        }
-    }
+    int[] p;
     
     public int solution(int n, int[][] computers) {
         int answer = 0;
-        isVisited = new boolean[n];
+        p = new int[n];
         
         for(int i = 0; i < n; i++){
-            if(!isVisited[i]) {
-                bfs(i, computers);
-                answer++;
-            }
+            p[i] = i;
         }
         
-        return answer;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(i != j && computers[i][j] == 1){
+                    union(i, j);
+                }
+            }
+        }
+
+        Set<Integer> set = new HashSet<>();
+        
+        for(int i = 0; i < n; i++){
+            set.add(find(i));
+        }
+        
+        return set.size();
+    }
+    
+    
+    private int find(int x){
+        if(p[x] == x) return x;
+        return p[x] = find(p[x]);
+    }
+    
+    private void union(int a, int b){
+        int pa = find(a);
+        int pb = find(b);
+
+        if(pa != pb){
+            p[pb] = pa;
+        }
     }
 }
