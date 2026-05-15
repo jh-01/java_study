@@ -1,49 +1,39 @@
 import java.util.*;
 
 class Solution {
-    private int[] dx = {0, 0, 1, -1};
-    private int[] dy = {1, -1, 0, 0};
-    private boolean[][] isVisited;
-    private int N;
-    private int M;
+    private int[] dx = {1, 0, -1, 0};
+    private int[] dy = {0, 1, 0, -1};
+    private boolean[][] visit;
     
-    private int bfs(int x, int y, int[][] maps){
-        int depth = 1;
+    public int solution(int[][] maps) {
+        visit = new boolean[maps.length][maps[0].length];
+        return bfs(maps, 0, 0);
+    }
+    
+    private int bfs(int[][] maps, int x, int y){
+        int N = maps.length;
+        int M = maps[0].length;
         Queue<int[]> q = new LinkedList<>();
         
-        q.offer(new int[]{x, y, depth});
-        isVisited[x][y] = true;
+        q.add(new int[]{x, y});
+        visit[x][y] = true;
         while(!q.isEmpty()){
             int[] temp = q.poll();
-            int tx = temp[0];
-            int ty = temp[1];
-            depth = temp[2];
-            
-            if(tx == N - 1 && ty == M - 1) return depth;
-            
             for(int i = 0; i < 4; i++){
-                int nx = tx + dx[i];
-                int ny = ty + dy[i];
+                int nx = temp[0] + dx[i];
+                int ny = temp[1] + dy[i];
                 
-                // 범위 벗어나는 경우
-                if(nx < 0 || nx >= N || ny < 0 || ny >= M)
-                    continue;
-                if(maps[nx][ny] == 1 && !isVisited[nx][ny]){
-                    q.offer(new int[]{nx, ny, depth + 1});
-                    isVisited[nx][ny] = true;
+                if(nx < 0 || nx >= N || ny < 0 || ny >= M || maps[nx][ny] == 0) continue;
+                
+                if(!visit[nx][ny]){
+                    visit[nx][ny] = true;
+                    q.add(new int[]{nx, ny});
+                    maps[nx][ny] = maps[temp[0]][temp[1]] + 1;
                 }
             }
         }
         
-        if(!isVisited[N - 1][M - 1]) return -1;
-        return depth;
-    }
-    
-    public int solution(int[][] maps) {
-        N = maps.length;
-        M = maps[0].length;
-        isVisited = new boolean[N][M];
-        
-        return bfs(0, 0, maps);
+        if(!visit[N - 1][M - 1]) return -1;
+        return maps[N-1][M-1];
     }
 }
