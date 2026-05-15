@@ -1,40 +1,39 @@
+
 class Solution {
     public int solution(int n, int[] lost, int[] reserve) {
-        int answer = 0;
-        int[] clothes = new int[n];
+        int[] counts = new int[n];
+        
+        for(int i = 0; i < n; i++) counts[i] = 1;
+        for(int i = 0; i < lost.length; i++) counts[lost[i] - 1]--;
+        for(int i = 0; i < reserve.length; i++) counts[reserve[i] - 1]++;
         
         for(int i = 0; i < n; i++){
-            clothes[i] = 1;
-        }
-        
-        for(int i = 0; i < lost.length; i++){
-            clothes[lost[i] - 1]--;
-        }
-        
-        for(int i = 0; i < reserve.length; i++){
-            clothes[reserve[i] - 1]++;
-        }
-        
-        for(int i = 0; i < n; i++){
-            if(clothes[i] > 0) {
-                answer++;
-            } else {
-                if(i != 0) {
-                    if(clothes[i - 1] > 1) {
-                        answer++;
-                        clothes[i - 1]--;
-                        continue;
-                    }
+            if(i == 0){
+                if(counts[i] == 0 && counts[i + 1] > 1){
+                    counts[i]++;
+                    counts[i + 1]--;
                 }
-                if(i < n - 1) {
-                    if(clothes[i + 1] > 1) {
-                        answer++;
-                        clothes[i + 1]--;
-                    }
+            } else if(i == n - 1){
+                if(counts[i] == 0 && counts[i - 1] > 1){
+                    counts[i]++;
+                    counts[i - 1]--;
+                }
+            } else {
+                if(counts[i] == 0 && counts[i - 1] > 1){
+                    counts[i]++;
+                    counts[i - 1]--;
+                }
+                if(counts[i] == 0 && counts[i + 1] > 1){
+                    counts[i]++;
+                    counts[i + 1]--;
                 }
             }
         }
         
-        return answer;
+        int count = 0;
+        for(int i = 0; i < n; i++){
+            if(counts[i] >= 1) count++;
+        }
+        return count;
     }
 }
