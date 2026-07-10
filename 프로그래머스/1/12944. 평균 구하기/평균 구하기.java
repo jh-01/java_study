@@ -1,7 +1,9 @@
 class Solution {
     public double solution(int[] arr) {
-        int sum = 0;
-        for(int a : arr) sum += a;
-        return (double) sum / arr.length;
+        double answer = 0;
+        for(int i = 0; i < arr.length; i++){
+            answer += arr[i];
+        }
+        return answer / arr.length;
     }
 }
