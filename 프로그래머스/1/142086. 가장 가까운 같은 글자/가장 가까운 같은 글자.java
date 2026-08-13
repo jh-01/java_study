@@ -1,14 +1,21 @@
 class Solution {
     public int[] solution(String s) {
-        int[] answer = new int[s.length()];
-        answer[0] = -1;
+        int n = s.length();
+        int[] answer = new int[n];
+        StringBuilder sb = new StringBuilder();
         
-        for(int i = 1; i < s.length(); i++){
-            char x = s.charAt(i);
-            String prev = s.substring(0, i);
-            if(prev.indexOf(x) == -1) answer[i] = -1;
-            else answer[i] = i - prev.lastIndexOf(x);
+        for(int i = 0; i < n; i++){
+            String temp = s.substring(i, i + 1);
+            int j = sb.lastIndexOf(temp);
+            
+            if(j == -1){
+                answer[i] = j;
+            } else {
+                answer[i] = i - sb.lastIndexOf(temp);
+            }
+            sb.append(temp);
         }
+        
         return answer;
     }
 }
