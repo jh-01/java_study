@@ -1,21 +1,25 @@
 import java.util.*;
 
 public class Solution {
-    public int[] solution(int []arr) {
-        ArrayList<Integer> list = new ArrayList<>();
+    public int[] solution(int[] arr) {
+        List<Integer> list = new ArrayList<>();
         
-        int temp = arr[0];
-        list.add(temp);
-        for(int i = 1; i < arr.length; i++){
-            if(temp == arr[i]) continue;
-            else {
+        int i = 0;
+        int n = arr.length;
+        int num = -1;
+        while(i < n){
+            if(arr[i] != num){
                 list.add(arr[i]);
-                temp = arr[i];
+                num = arr[i];
             }
+            i++;
         }
         
-        return list.stream()
-            .mapToInt(Integer::intValue)
-            .toArray();
+        int[] answer = new int[list.size()];
+        for(int j = 0; j < list.size(); j++){
+            answer[j] = list.get(j);
+        }
+        
+        return answer;
     }
 }
