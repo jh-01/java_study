@@ -1,15 +1,13 @@
-import java.util.HashSet;
+import java.util.*;
 
 class Solution {
     public int solution(int[] nums) {
-        HashSet<Integer> set = new HashSet<>();
-        for (int n : nums) {
-            set.add(n);
+        Set<Integer> set = new HashSet<>();
+        
+        for(int i = 0; i < nums.length; i++){
+            set.add(nums[i]);
         }
         
-        int totalKinds = set.size();
-        int canPick = nums.length / 2;
-
-        return Math.min(totalKinds, canPick);
+        return set.size() <= nums.length / 2 ? set.size() : nums.length / 2;
     }
 }
