@@ -2,31 +2,33 @@ import java.util.*;
 
 class Solution {
     public String solution(String[] participant, String[] completion) {
-        int N = participant.length;
+        int n = participant.length;
+        int m = completion.length;
         String answer = "";
-        
         Map<String, Integer> map = new HashMap<>();
-        for(int i = 0; i < N - 1; i++){
-            if(!map.containsKey(completion[i])){
-                map.put(completion[i], 1);
-            } else {
-                map.put(completion[i], map.get(completion[i]) + 1);
-            }
+        
+        for(int i = 0; i < n; i++){
+            String temp = participant[i];
             
+            if(map.containsKey(temp)){
+                map.put(temp, map.get(temp) + 1);
+            } else {
+                map.put(temp, 1);
+            }
         }
         
-        for(int i = 0; i < N; i++){
-            boolean isContained = map.containsKey(participant[i]);
-            if(!isContained) return participant[i];
-            
-            int x = map.get(participant[i]);
-            if(x > 0) {
-                map.put(participant[i], x - 1);
+        for(int i = 0; i < m; i++){
+            String temp = completion[i];
+            if(map.get(temp) > 0){
+                map.put(temp, map.get(temp) - 1);
             }
-            else {
-                return participant[i];
+        }
+        
+        for(int i = 0; i < n; i++){
+            String temp = participant[i];
+            if(map.get(temp) > 0){
+                answer = temp;
             }
-            
         }
         
         return answer;
